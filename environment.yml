@@ -189,5 +189,6 @@ dependencies:
       - tensorflow-io-gcs-filesystem==0.37.1
       - termcolor==3.2.0
       - threadpoolctl==3.6.0
+      - tqdm==4.67.1
       - wrapt==2.0.1
 prefix: /home/lampros/miniconda3/envs/waste-classifier
