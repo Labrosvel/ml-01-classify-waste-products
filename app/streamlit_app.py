@@ -9,7 +9,7 @@ from PIL import Image
 # ------------------------------
 @st.cache_resource
 def load_model():
-    model = tf.keras.models.load_model("model/waste_model.h5")
+    model = tf.keras.models.load_model("model/waste_model.keras")
     return model
 
 
@@ -20,7 +20,7 @@ model = load_model()
 # Preprocessing function
 # ------------------------------
 def preprocess_image(image: Image.Image):
-    image = image.resize((224, 224))  # adjust this if your model uses another size
+    image = image.resize((150, 150))  # adjust this if your model uses another size
     img_array = np.array(image) / 255.0
     img_array = np.expand_dims(img_array, axis=0)
     return img_array
