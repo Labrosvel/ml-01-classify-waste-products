@@ -5,18 +5,22 @@ from PIL import Image
 import plotly.express as px
 
 # -----------------------------------------------------
-# Page config
+# Streamlit Page Config
 # -----------------------------------------------------
-st.set_page_config(page_title="Waste Classifier", page_icon="♻️", layout="centered")
+st.set_page_config(
+    page_title="Waste Classifier",
+    page_icon="♻️",
+    layout="centered",
+)
 
 # -----------------------------------------------------
 # Header
 # -----------------------------------------------------
 st.markdown(
-    "<h1 style='text-align: center;'>♻️ Waste Classifier</h1>", unsafe_allow_html=True
-)
-st.markdown(
-    "<p style='text-align: center;'>Classify waste as Organic or Recyclable</p>",
+    """
+    <h1 style='text-align:center;'>♻️ Waste Classifier</h1>
+    <p style='text-align:center;'>Classify waste as Organic or Recyclable</p>
+    """,
     unsafe_allow_html=True,
 )
 st.markdown("---")
@@ -43,7 +47,8 @@ st.sidebar.caption("Micro-SaaS Experiment • Built with Streamlit + TensorFlow"
 # -----------------------------------------------------
 @st.cache_resource
 def load_model():
-    return tf.keras.models.load_model("model/waste_model.keras")
+    model_path = "model/waste_model.keras"
+    return tf.keras.models.load_model(model_path)
 
 
 model = load_model()
@@ -81,7 +86,7 @@ if uploaded_file:
     image = Image.open(uploaded_file)
 
     # Display uploaded image
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(image, caption="Uploaded Image", use_container_width=True)
 
     # Predict
     label, p_organic, p_recyclable = predict(image)
