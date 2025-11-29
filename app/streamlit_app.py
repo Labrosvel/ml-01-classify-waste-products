@@ -111,12 +111,6 @@ if uploaded_file:
     fig.update_traces(textposition="outside")
     st.plotly_chart(fig, use_container_width=True)
 
-    # -----------------------------------------------------
-    # Reset Button
-    # -----------------------------------------------------
-    if st.button("Reset"):
-        st.experimental_rerun()
-
 else:
     st.info("Please upload an image to begin.")
 
