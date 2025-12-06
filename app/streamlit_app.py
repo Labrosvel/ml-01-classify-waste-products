@@ -5,6 +5,51 @@ from PIL import Image
 
 st.set_page_config(layout="centered")
 
+# Custom CSS for thick bars
+st.markdown(
+    """
+<style>
+.prob-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.prob-label {
+    width: 120px;
+    font-weight: 600;
+}
+
+.prob-bar {
+    flex: 1;
+    height: 20px;
+    background-color: #eee;
+    border-radius: 10px;
+    margin: 0 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.prob-fill {
+    height: 100%;
+    background-color: #1E90FF;  /* default (Recyclable) */
+    border-radius: 10px;
+}
+
+.prob-fill-organic {
+    background-color: #6B8E23;
+}
+
+.prob-value {
+    width: 60px;
+    text-align: right;
+    font-weight: 600;
+}
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
 
 # ------------------------------
 # Load model (cached for speed)
@@ -109,7 +154,7 @@ if st.session_state.uploaded_file:
     # 🔥 Probability Distribution (clean version)
     st.markdown("### Probability Distribution")
 
-    # Determine probabilities consistently
+    # Compute probabilities
     if label == "Recyclable":
         p_recyclable = confidence
         p_organic = 1 - confidence
@@ -117,24 +162,31 @@ if st.session_state.uploaded_file:
         p_organic = confidence
         p_recyclable = 1 - confidence
 
-    # Two columns for labels + percentages
-    colA, colB = st.columns([1, 4])
+    # Convert to %
+    r_pct = f"{p_recyclable * 100:.1f}%"
+    o_pct = f"{p_organic * 100:.1f}%"
 
-    with colA:
-        st.write("♻️ **Recyclable**")
-    with colB:
-        st.progress(p_recyclable)
+    # Build UI
+    st.markdown(
+        f"""
+    <div class="prob-row">
+        <div class="prob-label">♻️ Recyclable</div>
+        <div class="prob-bar">
+            <div class="prob-fill" style="width:{p_recyclable * 100}%;"></div>
+        </div>
+        <div class="prob-value">{r_pct}</div>
+    </div>
 
-    st.write(f"{p_recyclable * 100:.1f}%")
-
-    colA, colB = st.columns([1, 4])
-
-    with colA:
-        st.write("🌱 **Organic**")
-    with colB:
-        st.progress(p_organic)
-
-    st.write(f"{p_organic * 100:.1f}%")
+    <div class="prob-row">
+        <div class="prob-label">🌱 Organic</div>
+        <div class="prob-bar">
+            <div class="prob-fill prob-fill-organic" style="width:{p_organic * 100}%;"></div>
+        </div>
+        <div class="prob-value">{o_pct}</div>
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
 
 # Example images
 col1, col2 = st.columns(2)
