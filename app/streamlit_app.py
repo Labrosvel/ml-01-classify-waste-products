@@ -3,6 +3,8 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
+st.set_page_config(layout="centered")
+
 
 # ------------------------------
 # Load model (cached for speed)
@@ -47,16 +49,43 @@ def predict(image: Image.Image):
 # ------------------------------
 st.title("♻️ Waste Classification AI")
 st.write("Upload an image of waste to classify it as **Organic** or **Recyclable**.")
+st.divider()
 
-uploaded_file = st.file_uploader("Choose an image", type=["jpg", "jpeg", "png"])
+# Track uploaded file for "Clear" button
+if "uploaded_file" not in st.session_state:
+    st.session_state.uploaded_file = None
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
-    st.image(image, caption="Uploaded Image", width=300)
+if "uploader_key" not in st.session_state:
+    st.session_state.uploader_key = 0
 
-    if st.button("Predict"):
-        label, confidence = predict(image)
+uploaded_file = st.file_uploader(
+    "Choose an image",
+    type=["jpg", "jpeg", "png"],
+    key=f"file_uploader_{st.session_state.uploader_key}",
+)
 
-        st.subheader("Prediction")
-        st.write(f"**Class:** {label}")
-        st.write(f"**Confidence:** {confidence:.2f}")
+if uploaded_file:
+    st.session_state.uploaded_file = uploaded_file
+
+# Clear button
+if st.session_state.get("uploaded_file"):
+    if st.button("Clear Image"):
+        st.session_state.uploaded_file = None
+        st.session_state.uploader_key += 1  # 🔥 reset widget
+        st.rerun()
+
+# If image exists, display + predict
+if st.session_state.uploaded_file:
+    image = Image.open(st.session_state.uploaded_file).convert("RGB")
+    st.image(image, caption="Uploaded Image", use_container_width=True)
+    st.divider()
+
+    # Predict automatically
+    label, confidence = predict(image)
+
+    st.markdown("### Prediction")
+
+    if label == "Recyclable":
+        st.success(f"♻️ **Recyclable** — Confidence: {confidence:.2f}")
+    else:
+        st.warning(f"🌱 **Organic** — Confidence: {confidence:.2f}")
