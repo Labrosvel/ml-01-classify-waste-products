@@ -88,6 +88,20 @@ if st.session_state.uploaded_file:
     st.markdown("### Prediction")
 
     if label == "Recyclable":
-        st.success(f"♻️ **Recyclable** — Confidence: {confidence:.2f}")
+        st.markdown(
+            f"""
+        <div style="padding:10px;border-radius:10px;background:#1E90FF">
+            <b>♻️ Recyclable</b><br>Confidence: {confidence:.2f}
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
     else:
-        st.warning(f"🌱 **Organic** — Confidence: {confidence:.2f}")
+        st.markdown(
+            f"""
+        <div style="padding:10px;border-radius:10px;background:#6B8E23">
+            <b>🌱 Organic</b><br>Confidence: {confidence:.2f}
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
