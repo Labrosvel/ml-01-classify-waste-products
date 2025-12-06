@@ -47,9 +47,10 @@ def predict(image: Image.Image):
 # ------------------------------
 # Streamlit UI
 # ------------------------------
-st.title("♻️ Waste Classification AI")
-st.write("Upload an image of waste to classify it as **Organic** or **Recyclable**.")
-st.divider()
+with st.container(border=True):
+    st.markdown("### ♻️ Waste Classification AI")
+    st.write("Upload an image to classify it as Organic or Recyclable.")
+
 
 # Track uploaded file for "Clear" button
 if "uploaded_file" not in st.session_state:
@@ -80,8 +81,9 @@ if st.session_state.uploaded_file:
     st.image(image, caption="Uploaded Image", use_container_width=True)
     st.divider()
 
-    # Predict automatically
-    label, confidence = predict(image)
+    # Predict automatically (I can't validate the difference, only in production I guess)
+    with st.spinner("Analyzing image..."):
+        label, confidence = predict(image)
 
     st.markdown("### Prediction")
 
