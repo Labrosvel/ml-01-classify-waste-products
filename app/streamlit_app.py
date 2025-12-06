@@ -105,3 +105,8 @@ if st.session_state.uploaded_file:
         """,
             unsafe_allow_html=True,
         )
+
+st.markdown(
+    "<p style='text-align:center; color: grey;'>Made with ❤️ by Lampros</p>",
+    unsafe_allow_html=True,
+)
