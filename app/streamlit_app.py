@@ -70,7 +70,7 @@ if uploaded_file:
 
 # Clear button
 if st.session_state.get("uploaded_file"):
-    if st.button("Clear Image"):
+    if st.button("Clear Image", use_container_width=True):
         st.session_state.uploaded_file = None
         st.session_state.uploader_key += 1  # 🔥 reset widget
         st.rerun()
