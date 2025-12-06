@@ -106,6 +106,36 @@ if st.session_state.uploaded_file:
             unsafe_allow_html=True,
         )
 
+    # 🔥 Confidence bar
+    st.write("Confidence level:")
+    st.progress(confidence)
+
+    # 🔥 Full probability distribution
+    st.markdown("### Probability Distribution")
+
+    if label == "Recyclable":
+        st.write(f"**Recyclable:** {confidence:.2f}")
+        st.write(f"**Organic:** {1 - confidence:.2f}")
+    else:
+        st.write(f"**Organic:** {confidence:.2f}")
+        st.write(f"**Recyclable:** {1 - confidence:.2f}")
+
+# Example images
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("Try Recyclable Example", key="ex_r", use_container_width=True):
+        st.session_state.uploaded_file = "notebooks/o-vs-r-split/test/R/R_71.jpg"
+        st.session_state.uploader_key += 1
+        st.rerun()
+
+with col2:
+    if st.button("Try Organic Example", key="ex_o", use_container_width=True):
+        st.session_state.uploaded_file = "notebooks/o-vs-r-split/test/O/O_1.jpg"
+        st.session_state.uploader_key += 1
+        st.rerun()
+
+
 st.markdown(
     "<p style='text-align:center; color: grey;'>Made with ❤️ by Lampros</p>",
     unsafe_allow_html=True,
