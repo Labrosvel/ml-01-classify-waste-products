@@ -106,19 +106,35 @@ if st.session_state.uploaded_file:
             unsafe_allow_html=True,
         )
 
-    # 🔥 Confidence bar
-    st.write("Confidence level:")
-    st.progress(confidence)
-
-    # 🔥 Full probability distribution
+    # 🔥 Probability Distribution (clean version)
     st.markdown("### Probability Distribution")
 
+    # Determine probabilities consistently
     if label == "Recyclable":
-        st.write(f"**Recyclable:** {confidence:.2f}")
-        st.write(f"**Organic:** {1 - confidence:.2f}")
+        p_recyclable = confidence
+        p_organic = 1 - confidence
     else:
-        st.write(f"**Organic:** {confidence:.2f}")
-        st.write(f"**Recyclable:** {1 - confidence:.2f}")
+        p_organic = confidence
+        p_recyclable = 1 - confidence
+
+    # Two columns for labels + percentages
+    colA, colB = st.columns([1, 4])
+
+    with colA:
+        st.write("♻️ **Recyclable**")
+    with colB:
+        st.progress(p_recyclable)
+
+    st.write(f"{p_recyclable * 100:.1f}%")
+
+    colA, colB = st.columns([1, 4])
+
+    with colA:
+        st.write("🌱 **Organic**")
+    with colB:
+        st.progress(p_organic)
+
+    st.write(f"{p_organic * 100:.1f}%")
 
 # Example images
 col1, col2 = st.columns(2)
