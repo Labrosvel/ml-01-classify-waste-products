@@ -142,12 +142,7 @@ if st.session_state.uploaded_file:
             unsafe_allow_html=True,
         )
     else:
-        st.markdown(
-            f"""
-        <div style="padding:10px;border-radius:10px;background:#6B8E23">
-            <b>🌱 Organic</b><br>Confidence: {confidence:.2f}
-        </div>
-        """,
+        st.markdown( Perfect for small SaaS apps like yours
             unsafe_allow_html=True,
         )
 
@@ -204,6 +199,37 @@ with col2:
         st.rerun()
 
 
+# ------------------------------
+# "Upgrade to Pro" Button
+# ------------------------------
+import requests
+import webbrowser
+import os
+
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
+
+st.divider()
+st.subheader("🚀 Upgrade to Waste Classifier Pro")
+
+if st.button("Upgrade for $5"):
+    try:
+        response = requests.post(f"{BACKEND_URL}/create-checkout-session")
+        session_id = response.json().get("id")
+
+        if session_id:
+            checkout_url = f"https://checkout.stripe.com/pay/{session_id}"
+            st.markdown(f"[Click here to complete payment]({checkout_url})")
+        else:
+            st.error("Could not create checkout session.")
+
+    except Exception as e:
+        st.error(f"Error: {e}")
+
+
+# ------------------------------
+# Footer
+# ------------------------------
 st.markdown(
     "<p style='text-align:center; color: grey;'>Made with ❤️ by Lampros</p>",
     unsafe_allow_html=True,
