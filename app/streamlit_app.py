@@ -142,7 +142,12 @@ if st.session_state.uploaded_file:
             unsafe_allow_html=True,
         )
     else:
-        st.markdown( Perfect for small SaaS apps like yours
+        st.markdown(
+            f"""
+        <div style="padding:10px;border-radius:10px;background:#6B8E23">
+            <b>🌱 Organic</b><br>Confidence: {confidence:.2f}
+        </div>
+        """,
             unsafe_allow_html=True,
         )
 
