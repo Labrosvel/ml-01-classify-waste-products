@@ -204,32 +204,32 @@ with col2:
         st.rerun()
 
 
-# ------------------------------
-# "Upgrade to Pro" Button
-# ------------------------------
-import requests
-import webbrowser
-import os
+# # ------------------------------
+# # "Upgrade to Pro" Button
+# # ------------------------------
+# import requests
+# import webbrowser
+# import os
 
-STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
-BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
+# STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+# BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
 
-st.divider()
-st.subheader("🚀 Upgrade to Waste Classifier Pro")
+# st.divider()
+# st.subheader("🚀 Upgrade to Waste Classifier Pro")
 
-if st.button("Upgrade for $5"):
-    try:
-        response = requests.post(f"{BACKEND_URL}/create-checkout-session")
-        session_id = response.json().get("id")
+# if st.button("Upgrade for $5"):
+#     try:
+#         response = requests.post(f"{BACKEND_URL}/create-checkout-session")
+#         session_id = response.json().get("id")
 
-        if session_id:
-            checkout_url = f"https://checkout.stripe.com/pay/{session_id}"
-            st.markdown(f"[Click here to complete payment]({checkout_url})")
-        else:
-            st.error("Could not create checkout session.")
+#         if session_id:
+#             checkout_url = f"https://checkout.stripe.com/pay/{session_id}"
+#             st.markdown(f"[Click here to complete payment]({checkout_url})")
+#         else:
+#             st.error("Could not create checkout session.")
 
-    except Exception as e:
-        st.error(f"Error: {e}")
+#     except Exception as e:
+#         st.error(f"Error: {e}")
 
 
 # ------------------------------
