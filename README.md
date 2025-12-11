@@ -1,3 +1,7 @@
+
+https://ml-01-classify-waste-appuctsgit-r89m87u8kffmauhgtvpakb.streamlit.app/
+https://ml-01-classify-waste-appuctsgit-nzm8crshdcp9bw2upagazz.streamlit.app/
+
 # Waste Classification AI
 
 A simple Streamlit app that classifies images of waste into
