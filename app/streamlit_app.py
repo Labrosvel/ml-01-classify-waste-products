@@ -204,32 +204,38 @@ with col2:
         st.rerun()
 
 
-# # ------------------------------
-# # "Upgrade to Pro" Button
-# # ------------------------------
-# import requests
-# import webbrowser
-# import os
+# ------------------------------
+# "Upgrade to Pro" Button
+# ------------------------------
+import requests
+import webbrowser
+import os
+import streamlit as st
 
-# STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
-# BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
+BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
 
-# st.divider()
-# st.subheader("🚀 Upgrade to Waste Classifier Pro")
+st.subheader("🚀 Upgrade to Waste Classifier Pro")
 
-# if st.button("Upgrade for $5"):
-#     try:
-#         response = requests.post(f"{BACKEND_URL}/create-checkout-session")
-#         session_id = response.json().get("id")
-
-#         if session_id:
-#             checkout_url = f"https://checkout.stripe.com/pay/{session_id}"
-#             st.markdown(f"[Click here to complete payment]({checkout_url})")
-#         else:
-#             st.error("Could not create checkout session.")
-
-#     except Exception as e:
-#         st.error(f"Error: {e}")
+if st.button("Upgrade for $5"):
+    try:
+        r = requests.post(f"{BACKEND_URL}/create-checkout-session", timeout=10)
+        r.raise_for_status()
+        js = r.json()
+        checkout_url = js.get("url")
+        if checkout_url:
+            # Open in a new tab — Streamlit will allow the link.
+            st.markdown(
+                f"[Open Stripe Checkout]({checkout_url})", unsafe_allow_html=True
+            )
+            # Optionally open automatically in user's browser (works locally)
+            try:
+                webbrowser.open_new_tab(checkout_url)
+            except:
+                pass
+        else:
+            st.error("Could not create checkout session.")
+    except Exception as e:
+        st.error(f"Error creating checkout session: {e}")
 
 
 # ------------------------------
