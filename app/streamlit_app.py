@@ -216,7 +216,7 @@ BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
 
 st.subheader("🚀 Upgrade to Waste Classifier Pro")
 
-if st.button("Upgrade for $5"):
+if st.button("Upgrade for £5"):
     try:
         r = requests.post(f"{BACKEND_URL}/create-checkout-session", timeout=10)
         r.raise_for_status()

@@ -23,8 +23,8 @@ def create_checkout_session():
             line_items=[
                 {
                     "price_data": {
-                        "currency": "usd",
-                        "unit_amount": 500,  # $5.00 in cents
+                        "currency": "gbp",
+                        "unit_amount": 500,  # £5.00 in pence
                         "product_data": {"name": "Waste Classifier Pro"},
                     },
                     "quantity": 1,
