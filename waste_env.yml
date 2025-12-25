@@ -321,6 +321,7 @@ dependencies:
       - pyparsing==3.2.5
       - scikit-learn==1.5.1
       - scipy==1.16.3
+      - streamlit-js-eval==0.1.7
       - stripe==14.0.1
       - tensorboard==2.20.0
       - tensorboard-data-server==0.7.2
@@ -329,4 +330,4 @@ dependencies:
       - threadpoolctl==3.6.0
       - werkzeug==3.1.4
       - wrapt==2.0.1
-prefix: /home/lampros/miniconda3/envs/waste-classifier
+prefix: /opt/conda/envs/waste-classifier

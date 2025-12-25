@@ -2,11 +2,29 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+from streamlit_js_eval import streamlit_js_eval
+
 
 st.set_page_config(layout="centered")
 
 if "pro" not in st.session_state:
     st.session_state.pro = False
+
+if "ignore_local_pro" not in st.session_state:
+    st.session_state.ignore_local_pro = False
+
+stored_pro = streamlit_js_eval(
+    js_expressions="localStorage.getItem('pro_user')",
+    key="get_pro_status",
+)
+
+if (
+    stored_pro == "true"
+    and not st.session_state.pro
+    and not st.session_state.ignore_local_pro
+):
+    st.session_state.pro = True
+    st.rerun()
 
 if st.session_state.pro:
     st.success("🚀 Pro mode active")
@@ -269,6 +287,10 @@ if st.session_state.checkout_session_id:
 
             if result.get("paid"):
                 st.session_state.pro = True
+                st.session_state.ignore_local_pro = False
+                streamlit_js_eval(
+                    js_expressions="localStorage.setItem('pro_user', 'true')"
+                )
                 st.success("🎉 Pro unlocked successfully!")
                 st.rerun()
             else:
@@ -277,6 +299,14 @@ if st.session_state.checkout_session_id:
         except Exception as e:
             st.error(f"Verification error: {e}")
 
+if st.session_state.pro:
+    if st.button("🔓 Disable Pro (session only)"):
+        streamlit_js_eval(
+            js_expressions="localStorage.removeItem('pro_user')"
+        )
+        st.session_state.pro = False
+        st.session_state.ignore_local_pro = True
+        st.rerun()
 
 
 # ------------------------------
