@@ -39,6 +39,20 @@ def create_checkout_session():
     except Exception as e:
         return jsonify(error=str(e)), 400
 
+@app.get("/verify-session/<session_id>")
+def verify_session(session_id):
+    try:
+        session = stripe.checkout.Session.retrieve(session_id)
+
+        return jsonify({
+            "id": session.id,
+            "payment_status": session.payment_status,
+            "paid": session.payment_status == "paid"
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 
 if __name__ == "__main__":
     # For local testing

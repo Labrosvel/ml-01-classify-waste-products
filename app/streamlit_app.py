@@ -96,7 +96,6 @@ with st.container(border=True):
     st.markdown("### ♻️ Waste Classification AI")
     st.write("Upload an image to classify it as Organic or Recyclable.")
 
-
 # Track uploaded file for "Clear" button
 if "uploaded_file" not in st.session_state:
     st.session_state.uploaded_file = None
@@ -216,12 +215,21 @@ BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
 
 st.subheader("🚀 Upgrade to Waste Classifier Pro")
 
+if "checkout_session_id" not in st.session_state:
+    st.session_state.checkout_session_id = None
+
 if st.button("Upgrade for £5"):
     try:
         r = requests.post(f"{BACKEND_URL}/create-checkout-session", timeout=10)
         r.raise_for_status()
         js = r.json()
+
         checkout_url = js.get("url")
+        session_id = js.get("id")
+
+        if checkout_url and session_id:
+            st.session_state.checkout_session_id = session_id
+
         if checkout_url:
             # Open in a new tab — Streamlit will allow the link.
             st.markdown(
@@ -236,6 +244,25 @@ if st.button("Upgrade for £5"):
             st.error("Could not create checkout session.")
     except Exception as e:
         st.error(f"Error creating checkout session: {e}")
+
+if st.session_state.checkout_session_id:
+    if st.button("✅ I’ve completed payment – verify"):
+        try:
+            r = requests.get(
+                f"{BACKEND_URL}/verify-session/{st.session_state.checkout_session_id}",
+                timeout=10,
+            )
+            r.raise_for_status()
+            result = r.json()
+
+            if result.get("paid"):
+                st.success("🎉 Payment verified successfully!")
+            else:
+                st.warning("Payment not completed yet.")
+
+        except Exception as e:
+            st.error(f"Verification error: {e}")
+
 
 
 # ------------------------------
