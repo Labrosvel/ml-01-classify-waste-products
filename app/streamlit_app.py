@@ -5,6 +5,15 @@ from PIL import Image
 
 st.set_page_config(layout="centered")
 
+if "pro" not in st.session_state:
+    st.session_state.pro = False
+
+if st.session_state.pro:
+    st.success("🚀 Pro mode active")
+else:
+    st.info("🔒 Pro features locked. Upgrade to unlock.")
+
+
 # Custom CSS for thick bars
 st.markdown(
     """
@@ -150,42 +159,45 @@ if st.session_state.uploaded_file:
             unsafe_allow_html=True,
         )
 
-    # 🔥 Probability Distribution (clean version)
-    st.markdown("### Probability Distribution")
+    if st.session_state.pro:
+        # 🔥 Probability Distribution (clean version)
+        st.markdown("### Probability Distribution")
 
-    # Compute probabilities
-    if label == "Recyclable":
-        p_recyclable = confidence
-        p_organic = 1 - confidence
+        # Compute probabilities
+        if label == "Recyclable":
+            p_recyclable = confidence
+            p_organic = 1 - confidence
+        else:
+            p_organic = confidence
+            p_recyclable = 1 - confidence
+
+        # Convert to %
+        r_pct = f"{p_recyclable * 100:.1f}%"
+        o_pct = f"{p_organic * 100:.1f}%"
+
+        # Build UI
+        st.markdown(
+            f"""
+        <div class="prob-row">
+            <div class="prob-label">♻️ Recyclable</div>
+            <div class="prob-bar">
+                <div class="prob-fill" style="width:{p_recyclable * 100}%;"></div>
+            </div>
+            <div class="prob-value">{r_pct}</div>
+        </div>
+
+        <div class="prob-row">
+            <div class="prob-label">🌱 Organic</div>
+            <div class="prob-bar">
+                <div class="prob-fill prob-fill-organic" style="width:{p_organic * 100}%;"></div>
+            </div>
+            <div class="prob-value">{o_pct}</div>
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
     else:
-        p_organic = confidence
-        p_recyclable = 1 - confidence
-
-    # Convert to %
-    r_pct = f"{p_recyclable * 100:.1f}%"
-    o_pct = f"{p_organic * 100:.1f}%"
-
-    # Build UI
-    st.markdown(
-        f"""
-    <div class="prob-row">
-        <div class="prob-label">♻️ Recyclable</div>
-        <div class="prob-bar">
-            <div class="prob-fill" style="width:{p_recyclable * 100}%;"></div>
-        </div>
-        <div class="prob-value">{r_pct}</div>
-    </div>
-
-    <div class="prob-row">
-        <div class="prob-label">🌱 Organic</div>
-        <div class="prob-bar">
-            <div class="prob-fill prob-fill-organic" style="width:{p_organic * 100}%;"></div>
-        </div>
-        <div class="prob-value">{o_pct}</div>
-    </div>
-    """,
-        unsafe_allow_html=True,
-    )
+        st.info("Upgrade to Pro to see detailed probabilities.")
 
 # Example images
 col1, col2 = st.columns(2)
@@ -256,7 +268,9 @@ if st.session_state.checkout_session_id:
             result = r.json()
 
             if result.get("paid"):
-                st.success("🎉 Payment verified successfully!")
+                st.session_state.pro = True
+                st.success("🎉 Pro unlocked successfully!")
+                st.rerun()
             else:
                 st.warning("Payment not completed yet.")
 
