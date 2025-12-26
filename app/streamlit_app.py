@@ -267,9 +267,9 @@ with col2:
 # "Upgrade to Pro" Button
 # ------------------------------
 import requests
-import webbrowser
+# import webbrowser
 import os
-import streamlit as st
+# import streamlit as st
 
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
 
@@ -295,16 +295,23 @@ if not st.session_state.pro:
             if checkout_url and session_id:
                 st.session_state.checkout_session_id = session_id
 
-            if checkout_url:
-                # Open in a new tab — Streamlit will allow the link.
-                st.markdown(
-                    f"[Open Stripe Checkout]({checkout_url})", unsafe_allow_html=True
+                 # ✅ Client-side redirect (works everywhere)
+                streamlit_js_eval(
+                    js_expressions=f"window.open('{checkout_url}', '_blank')"
                 )
-                # Optionally open automatically in user's browser (works locally)
-                try:
-                    webbrowser.open_new_tab(checkout_url)
-                except:
-                    pass
+
+                st.info("Stripe Checkout opened in a new tab. Complete payment, then return here.")
+
+        #     if checkout_url:
+        #         # Open in a new tab — Streamlit will allow the link.
+        #         st.markdown(
+        #             f"[Open Stripe Checkout]({checkout_url})", unsafe_allow_html=True
+        #         )
+        #         # Optionally open automatically in user's browser (works locally)
+        #         try:
+        #             webbrowser.open_new_tab(checkout_url)
+        #         except:
+        #             pass
             else:
                 st.error("Could not create checkout session.")
         except Exception as e:
