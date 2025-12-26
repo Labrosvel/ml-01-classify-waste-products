@@ -273,66 +273,69 @@ import streamlit as st
 
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
 
-st.subheader("🚀 Upgrade to Waste Classifier Pro")
-st.caption(
-    "One-time payment. Instant unlock. No subscriptions. You’ll immediately see more detailed prediction insights."
-)
+if not st.session_state.pro:
+    
+    st.subheader("🚀 Upgrade to Waste Classifier Pro")
+    st.caption(
+        "One-time payment. Instant unlock. No subscriptions. You’ll immediately see more detailed prediction insights."
+    )
 
+    if "checkout_session_id" not in st.session_state:
+        st.session_state.checkout_session_id = None
 
-
-if "checkout_session_id" not in st.session_state:
-    st.session_state.checkout_session_id = None
-
-if st.button("Upgrade for £5"):
-    try:
-        r = requests.post(f"{BACKEND_URL}/create-checkout-session", timeout=10)
-        r.raise_for_status()
-        js = r.json()
-
-        checkout_url = js.get("url")
-        session_id = js.get("id")
-
-        if checkout_url and session_id:
-            st.session_state.checkout_session_id = session_id
-
-        if checkout_url:
-            # Open in a new tab — Streamlit will allow the link.
-            st.markdown(
-                f"[Open Stripe Checkout]({checkout_url})", unsafe_allow_html=True
-            )
-            # Optionally open automatically in user's browser (works locally)
-            try:
-                webbrowser.open_new_tab(checkout_url)
-            except:
-                pass
-        else:
-            st.error("Could not create checkout session.")
-    except Exception as e:
-        st.error(f"Error creating checkout session: {e}")
-
-if st.session_state.checkout_session_id:
-    if st.button("✅ I’ve completed payment – verify"):
+    if st.button("Upgrade for £5"):
         try:
-            r = requests.get(
-                f"{BACKEND_URL}/verify-session/{st.session_state.checkout_session_id}",
-                timeout=10,
-            )
+            r = requests.post(f"{BACKEND_URL}/create-checkout-session", timeout=10)
             r.raise_for_status()
-            result = r.json()
+            js = r.json()
 
-            if result.get("paid"):
-                st.session_state.pro = True
-                st.session_state.ignore_local_pro = False
-                streamlit_js_eval(
-                    js_expressions="localStorage.setItem('pro_user', 'true')"
+            checkout_url = js.get("url")
+            session_id = js.get("id")
+
+            if checkout_url and session_id:
+                st.session_state.checkout_session_id = session_id
+
+            if checkout_url:
+                # Open in a new tab — Streamlit will allow the link.
+                st.markdown(
+                    f"[Open Stripe Checkout]({checkout_url})", unsafe_allow_html=True
                 )
-                st.success("🎉 Pro unlocked successfully!")
-                st.rerun()
+                # Optionally open automatically in user's browser (works locally)
+                try:
+                    webbrowser.open_new_tab(checkout_url)
+                except:
+                    pass
             else:
-                st.warning("Payment not completed yet.")
-
+                st.error("Could not create checkout session.")
         except Exception as e:
-            st.error(f"Verification error: {e}")
+            st.error(f"Error creating checkout session: {e}")
+
+    if st.session_state.checkout_session_id:
+        if st.button("✅ I’ve completed payment – verify"):
+            try:
+                r = requests.get(
+                    f"{BACKEND_URL}/verify-session/{st.session_state.checkout_session_id}",
+                    timeout=10,
+                )
+                r.raise_for_status()
+                result = r.json()
+
+                if result.get("paid"):
+                    st.session_state.pro = True
+                    st.session_state.ignore_local_pro = False
+                    streamlit_js_eval(
+                        js_expressions="localStorage.setItem('pro_user', 'true')"
+                    )
+                    st.success(
+                            "🎉 Payment confirmed! Pro features are now unlocked — "
+                            "scroll up to see the detailed probability breakdown."
+                        )
+                    st.rerun()
+                else:
+                    st.warning("Payment not completed yet.")
+
+            except Exception as e:
+                st.error(f"Verification error: {e}")
 
 if st.session_state.pro:
     if st.button("🔓 Disable Pro (session only)"):
