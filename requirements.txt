@@ -6,3 +6,4 @@ stripe>=5.0
 Flask>=2.0
 python-dotenv
 flask-cors
+streamlit-js-eval
