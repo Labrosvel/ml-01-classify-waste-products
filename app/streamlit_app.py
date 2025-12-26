@@ -26,11 +26,30 @@ if (
     st.session_state.pro = True
     st.rerun()
 
+# ------------------------------
+# Pro status banner
+# ------------------------------
 if st.session_state.pro:
-    st.success("🚀 Pro mode active")
+    st.markdown(
+        """
+        <div style="padding:16px;border-radius:12px;background:#0514e6;border:1px solid #1E90FF;">
+            <b>🚀 Pro Mode Active</b><br>
+            You have full access to advanced prediction insights.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 else:
-    st.info("🔒 Pro features locked. Upgrade to unlock.")
-
+    st.markdown(
+        """
+        <div style="padding:16px;border-radius:12px;background:#8B0000;border:1px solid #FFA500;">
+            <b>🔒 Pro Features Locked</b><br>
+            Upgrade to Pro to see detailed probability breakdowns and confidence insights.
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+# ------------------------------
 
 # Custom CSS for thick bars
 st.markdown(
@@ -215,7 +234,18 @@ if st.session_state.uploaded_file:
             unsafe_allow_html=True,
         )
     else:
-        st.info("Upgrade to Pro to see detailed probabilities.")
+        st.markdown(
+            """
+            <div style="padding:14px;border-radius:10px;background:#8B0000;border:1px dashed #CCC;">
+                <b>🔍 Want deeper insight?</b><br>
+                Pro users can see the full probability distribution behind this prediction,
+                not just the final label.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+# ------------------------------    
+
 
 # Example images
 col1, col2 = st.columns(2)
@@ -244,6 +274,11 @@ import streamlit as st
 BACKEND_URL = os.getenv("BACKEND_URL", "http://localhost:4242")
 
 st.subheader("🚀 Upgrade to Waste Classifier Pro")
+st.caption(
+    "One-time payment. Instant unlock. No subscriptions. You’ll immediately see more detailed prediction insights."
+)
+
+
 
 if "checkout_session_id" not in st.session_state:
     st.session_state.checkout_session_id = None
