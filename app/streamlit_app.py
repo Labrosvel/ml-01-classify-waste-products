@@ -13,18 +13,18 @@ if "pro" not in st.session_state:
 if "ignore_local_pro" not in st.session_state:
     st.session_state.ignore_local_pro = False
 
+# ------------------------------
+# Restore Pro from localStorage (source of truth)
+# ------------------------------
 stored_pro = streamlit_js_eval(
     js_expressions="localStorage.getItem('pro_user')",
     key="get_pro_status",
 )
 
-if (
-    stored_pro == "true"
-    and not st.session_state.pro
-    and not st.session_state.ignore_local_pro
-):
-    st.session_state.pro = True
-    st.rerun()
+if stored_pro == "true" and not st.session_state.ignore_local_pro:
+    if not st.session_state.pro:
+        st.session_state.pro = True
+        st.rerun()
 
 # ------------------------------
 # Pro status banner
@@ -339,9 +339,6 @@ if not st.session_state.pro:
 
 if st.session_state.pro:
     if st.button("🔓 Disable Pro (session only)"):
-        streamlit_js_eval(
-            js_expressions="localStorage.removeItem('pro_user')"
-        )
         st.session_state.pro = False
         st.session_state.ignore_local_pro = True
         st.rerun()
