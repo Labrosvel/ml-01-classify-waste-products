@@ -1,7 +1,3 @@
-
-https://ml-01-classify-waste-appuctsgit-r89m87u8kffmauhgtvpakb.streamlit.app/
-https://ml-01-classify-waste-appuctsgit-nzm8crshdcp9bw2upagazz.streamlit.app/
-
 # Waste Classification AI ♻️
 
 A machine learning–powered web application that classifies images of waste into:
@@ -18,8 +14,8 @@ A lightweight **Flask backend** is used for model inference when deployed.
 
 Frontend (Streamlit Cloud):
 
-- https://ml-01-classify-waste-appuctsgit-r89m87u8kffmauhgtvpakb.streamlit.app/
-- https://ml-01-classify-waste-appuctsgit-nzm8crshdcp9bw2upagazz.streamlit.app/
+- Production: https://ml-01-classify-waste-appuctsgit-r89m87u8kffmauhgtvpakb.streamlit.app/
+- Testing: https://ml-01-classify-waste-appuctsgit-nzm8crshdcp9bw2upagazz.streamlit.app/
 
 Backend (Flask API):
 
@@ -47,7 +43,7 @@ Backend (Flask API):
 │ └── server.py # Flask backend (model inference API)
 │
 ├── model/
-│ └── waste_classifier.h5 # Trained Keras model
+│ └── waste_classifier.keras # Trained Keras model
 │
 ├── notebooks/
 │ └── training.ipynb # Model training & experimentation
@@ -80,52 +76,35 @@ Backend (Flask API):
 ## ⚙️ Running Locally (Development)
 
 ### 1. Create the Conda environment
-
-```bash
+```
 conda env create -f waste_env.yml
-conda activate waste
-
-2. Set environment variables
-
+conda activate waste-classifier
+```
+### 2. Set environment variables
 Create a .env file:
-
+```
 BACKEND_URL=http://localhost:5000
-
-
+```
 (Used by the Streamlit app to call the Flask API)
-
-3. Run the backend (Flask)
-python server/server.py
-
-
+### 3. Run the backend (Flask)
+```python server/server.py```
 Backend will be available at:
+```http://localhost:5000```
+### 4. Run the frontend (Streamlit)
+```streamlit run app/streamlit_app.py```
 
-http://localhost:5000
+## 📦 Deployment Setup
+**Frontend – Streamlit Cloud**
+- Uses ```requirements.txt```
+- Entry point:
+```app/streamlit_app.py```
+- Backend URL is configured via Streamlit secrets or environment variables
+**Backend – Render.com**
+- Flask app deployed separately
+- Environment variables configured in Render dashboard
+- Uses the same model file under model/
 
-4. Run the frontend (Streamlit)
-streamlit run app/streamlit_app.py
-
-📦 Deployment Setup
-Frontend – Streamlit Cloud
-
-Uses requirements.txt
-
-Entry point:
-
-app/streamlit_app.py
-
-
-Backend URL is configured via Streamlit secrets or environment variables
-
-Backend – Render.com
-
-Flask app deployed separately
-
-Environment variables configured in Render dashboard
-
-Uses the same model file under model/
-
-🧪 Environment Strategy (Important)
+## 🧪 Environment Strategy (Important)
 Context	Environment
 Development	Conda (waste_env.yml)
 Local testing	venv (ship-venv)
@@ -133,43 +112,28 @@ Frontend prod	Streamlit Cloud
 Backend prod	Render.com
 
 Conda is used for development and experimentation.
-A lightweight venv + requirements.txt is used to mirror production.
+A lightweight ```venv``` + ```requirements.txt``` is used to mirror production.
 
-🔒 Environment Variables
-
+## 🔒 Environment Variables
 Variables are never committed to GitHub.
-
 Used environments:
+- ```.env``` locally
+- GitHub Codespaces secrets
+- Streamlit Cloud secrets
+- Render environment variables
 
-.env locally
+## 🧠 Model Training
+- Model was trained in a Jupyter notebook under notebooks/
+- Dataset preprocessing, augmentation, and evaluation are documented in the notebook
+- Final model exported as .h5 and stored under model/
 
-GitHub Codespaces secrets
+## 📌 Future Improvements
+- Multi-class waste classification
+- Model confidence explanations
+- Batch image upload
+- Dataset expansion
+- Model versioning
 
-Streamlit Cloud secrets
-
-Render environment variables
-
-🧠 Model Training
-
-Model was trained in a Jupyter notebook under notebooks/
-
-Dataset preprocessing, augmentation, and evaluation are documented in the notebook
-
-Final model exported as .h5 and stored under model/
-
-📌 Future Improvements
-
-Multi-class waste classification
-
-Model confidence explanations
-
-Batch image upload
-
-Dataset expansion
-
-Model versioning
-
-👤 Author
-
-Built by Lampros Velentzas
+## 👤 Author
+Built by **Lampros Velentzas**
 Machine Learning / Data Science Project
