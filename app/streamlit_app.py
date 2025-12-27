@@ -301,17 +301,6 @@ if not st.session_state.pro:
                 )
 
                 st.info("Stripe Checkout opened in a new tab. Complete payment, then return here.")
-
-        #     if checkout_url:
-        #         # Open in a new tab — Streamlit will allow the link.
-        #         st.markdown(
-        #             f"[Open Stripe Checkout]({checkout_url})", unsafe_allow_html=True
-        #         )
-        #         # Optionally open automatically in user's browser (works locally)
-        #         try:
-        #             webbrowser.open_new_tab(checkout_url)
-        #         except:
-        #             pass
             else:
                 st.error("Could not create checkout session.")
         except Exception as e:
