@@ -8,7 +8,6 @@ A machine learning–powered web application that classifies images of waste int
 The app is built with **Streamlit** on the frontend and uses a **TensorFlow / Keras** image classification model.  
 A lightweight **Flask backend** is used for model inference when deployed.
 
----
 
 ## 🚀 Live Demo
 
@@ -21,7 +20,6 @@ Backend (Flask API):
 
 - Deployed on **Render.com**
 
----
 
 ## 🧠 What the App Does
 
@@ -32,7 +30,6 @@ Backend (Flask API):
    - **Recyclable**
 4. The result is displayed in the Streamlit UI with confidence scores
 
----
 
 ## 📁 Project Structure
 
@@ -58,7 +55,6 @@ Backend (Flask API):
 └── README.md
 
 
----
 
 ## 🛠️ Tech Stack
 
@@ -71,7 +67,6 @@ Backend (Flask API):
   - Render.com (backend)
 - **Environments:** Conda (dev), venv (deployment)
 
----
 
 ## ⚙️ Running Locally (Development)
 
